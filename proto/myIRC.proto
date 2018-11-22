@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/any.proto";
+
+package myIRC;
+
+service IrcService {
+  rpc signUp (User) returns (Reply);
+  rpc signIn (Auth) returns (stream Reply);
+  rpc profile (Empty) returns (User);
+  rpc join (Channel) returns (Reply);
+  rpc send (Message) returns (Empty);
+  rpc leave (Empty) returns (Reply);
+  rpc list (Empty) returns (Channels);
+  rpc history (Options) returns (Messages);
+}
+
+message Options {
+  repeated Any options = 1;
+}
+
+message Auth {
+  oneof username {
+    string nickname = 1;
+    string email = 2;
+  }
+  string password = 3;
+}
+
+message User {
+    string firstname = 1;
+    string lastname = 2;
+    string nickname = 3;
+    uint32 age = 4;
+    string password = 5;
+    string email = 6;
+}
+
+message Reply {
+  string text = 1;
+}
+
+message Channel {
+  string name = 1;
+}
+
+message Channels {
+  repeated Channel channels = 1;
+}
+
+message Message {
+  string text = 1;
+  string date = 2;
+  Channel channel = 3;
+}
+
+message Messages {
+  repeated Message messages = 1;
+}
